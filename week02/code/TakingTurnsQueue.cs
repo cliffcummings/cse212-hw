@@ -1,3 +1,5 @@
+using System.Diagnostics;  // for Debug.Write operations
+
 /// <summary>
 /// This queue is circular.  When people are added via AddPerson, then they are added to the 
 /// back of the queue (per FIFO rules).  When GetNextPerson is called, the next person
@@ -9,9 +11,9 @@
 /// </summary>
 public class TakingTurnsQueue
 {
-    private readonly PersonQueue _people = new();
+    private readonly PersonQueue _people = new();   // creates s new PersonQueue called _people
 
-    public int Length => _people.Length;
+    public int Length => _people.Length;    // keeps the number of Persons in the PersonQueue
 
     /// <summary>
     /// Add new people to the queue with a name and number of turns
@@ -22,6 +24,7 @@ public class TakingTurnsQueue
     {
         var person = new Person(name, turns);
         _people.Enqueue(person);
+        Debug.WriteLine($"Name={person.Name} / Turns={person.Turns}");
     }
 
     /// <summary>
@@ -40,11 +43,20 @@ public class TakingTurnsQueue
         else
         {
             Person person = _people.Dequeue();
+            Debug.WriteLine($"Person being dequeued is Name={person.Name} / Turns={person.Turns}");
             if (person.Turns > 1)
             {
                 person.Turns -= 1;
                 _people.Enqueue(person);
+                Debug.WriteLine($"Enqueing Name={person.Name} / Turns={person.Turns}");
             }
+            else if (person.Turns <= 0)  // Continue enqueing if Turns is 0 or negative
+            {
+                _people.Enqueue(person); // return the person and enqueue again
+            }
+
+            // else return the person but do not enqueue again
+            
 
             return person;
         }
