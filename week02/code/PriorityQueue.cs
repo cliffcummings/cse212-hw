@@ -1,6 +1,10 @@
-﻿public class PriorityQueue
+﻿using System.Diagnostics;  // for Debug.Write operations
+
+public class PriorityQueue
 {
     private List<PriorityItem> _queue = new();
+
+    public int Depth => _queue.Count;
 
     /// <summary>
     /// Add a new value to the queue with an associated priority.  The
@@ -24,14 +28,33 @@
 
         // Find the index of the item with the highest priority to remove
         var highPriorityIndex = 0;
-        for (int index = 1; index < _queue.Count - 1; index++)
+        for (int index = 0; index <= _queue.Count - 1; index++)
         {
-            if (_queue[index].Priority >= _queue[highPriorityIndex].Priority)
+            Debug.WriteLine( "------------------------------------");
+            Debug.WriteLine($"Examining Queue Item: {_queue[index].Value} / {_queue[index].Priority}");
+
+            // Change comparison from >= to just > so the first item 
+            // with equal priority will be removed
+            if (_queue[index].Priority > _queue[highPriorityIndex].Priority)
+            {
+                Debug.WriteLine("*** TRUE - NEW HIGH PRIORITY ***");
                 highPriorityIndex = index;
+                Debug.WriteLine($"Index     Priority: {_queue[index].Priority}");
+                Debug.WriteLine($"highIndex Priority: {_queue[highPriorityIndex].Priority}");   
+            }
+            else 
+            {
+                Debug.WriteLine("*** FALSE **********************");
+            }
+            Debug.WriteLine($"Index:              {index}");
+            Debug.WriteLine($"highPriorityIndex:  {highPriorityIndex}");
         }
 
         // Remove and return the item with the highest priority
         var value = _queue[highPriorityIndex].Value;
+        _queue.RemoveAt(highPriorityIndex);
+        Debug.WriteLine( "---- Dequeue -----------------------");
+        Debug.WriteLine($"     Dequeueing Item: {value}");
         return value;
     }
 
@@ -43,7 +66,8 @@
     }
 }
 
-internal class PriorityItem
+// internal class PriorityItem
+public class PriorityItem
 {
     internal string Value { get; set; }
     internal int Priority { get; set; }
