@@ -1,4 +1,6 @@
-﻿public class DuplicateCounter
+﻿using System.Linq;
+
+public class DuplicateCounter
 {
     //Count how many duplicates are in a collection of data.
 
@@ -17,6 +19,7 @@
             85, 47, 80, 18, 32, 59, 98, 92, 53, 98, 29, 61, 82, 42, 78, 97, 23, 94, 38, 20, 73, 11, 99, 94, 92, 82, 82,
             65
         ];
+        int[] uniqueData = data.Distinct().ToArray();
 
         Console.WriteLine($"Number of items in the collection: {data.Length}");
         Console.WriteLine($"Number of duplicates : {CountDuplicates(data)}");
@@ -24,7 +27,36 @@
 
     private static int CountDuplicates(int[] data)
     {
+        HashSet<int> counts = new HashSet<int>();
+        int dupCount = 0;
+        // Console.WriteLine("counts HashSet contains {0} elements: ", counts.Count);
+        for (int i = 0; i <data.Length; i++)
+        // for (int i = 0; i <10; i++) // start with a subset for testing purposes
+        {
+            // Console.Write($"data[{i}] value is {data[i]}, ");
+            // NOTE: HashSet Add() method is a function that returns a boolean value 
+            // true if the element is added to the HashSet<T> object; false if the 
+            // element is already present. 
+            // Source: https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.hashset-1.add?view=net-10.0
+
+            if (!counts.Add(data[i])) // Adds data[i] to the HashSet and returns false if already present
+            {
+                dupCount++; // increment the dupCount if already present
+            }
+        }
+        // Console.WriteLine("");
+        DisplaySet(counts);
         // Add code here.
-        return 0;
+        return dupCount;
+    }
+
+    static void DisplaySet(HashSet<int> collection) // to diplay contents of a HashSet
+    {
+        Console.Write("{");
+        foreach (int i in collection)
+        {
+            Console.Write(" {0}", i);
+        }
+        Console.WriteLine(" }");
     }
 }
