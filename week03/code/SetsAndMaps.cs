@@ -112,6 +112,12 @@ public static class SetsAndMaps
             }
             // TODO Problem 2 - ADD YOUR CODE HERE
         }
+        // Alternative modern C# approach using deconstruction (C# 7.0+)
+        Console.WriteLine("\nDictionary Contents (using deconstruction):");
+        foreach (var (key, value) in degrees)
+        {
+            Console.WriteLine($"Key = {key},          Value = {value}");
+        }
 
         return degrees;
     }
