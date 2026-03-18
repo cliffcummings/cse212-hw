@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.Diagnostics;
+using System.Linq; // required for ToList()
 using System.Security.Cryptography;  // for Debug.Write operations
 
 public static class SetsAndMaps
@@ -21,8 +22,14 @@ public static class SetsAndMaps
     /// that there were no duplicates) and therefore should not be returned.
     /// </summary>
     /// <param name="words">An array of 2-character words (lowercase, no duplicates)</param>
+    /// --------------------------------------------------------------------
+    /// words is the input strings array
+    /// dynList is the input strings array converted to a dynamic array
+    /// pairsList dynamic array to hold created paris-strings
+    /// --------------------------------------------------------------------
+
     public static string[] FindPairs(string[] words)
-    { 
+    {
         // TODO Problem 1 - ADD YOUR CODE HERE
         // DEBUG - show contents of words input-array
         foreach (string word in words)
@@ -30,40 +37,52 @@ public static class SetsAndMaps
             Debug.Write($"{word}, ");
         }
         Debug.WriteLine(" :DBG1");
-        string chars1 = words[0];   // To hold current input string
-        char[] chars1Arr;
-        string chars2;              // To hold reversed input string
+        // END DEBUG
 
-        // Declare a string array to hold string pairs
-        string[] pairsStrings = new string[words.Length/2];
+        List<string> dynList = words.ToList();  // Uses System.Linq
+        int listSize = dynList.Count;           // number of elements in the dynamic array
+        List<string> pairsList = new List<string>();
+        string pairString;
+
+        string chars1 = dynList[0];             // To hold current input string (initialized to dynList[0])
+        char[] chars1Arr;                       // chars1 to be converted to a chars1Arr
+        string chars2;                          // To hold reversed input string
+
         // Declare a HashSet to store and check input words
         HashSet<string> items = new HashSet<string>();
         // Place the first string into the HashSet
         items.Add(chars1);
-        int p = 0; // To index into the pairs array
-        for (int i = 1; i < words.Length; i++)
+        for (int i = 1; i < listSize; i++)
         {
-            chars1 = words[i];
+            chars1 = dynList[i];
             items.Add(chars1);                       // Add the next item to the Set
-            chars1Arr = chars1.ToCharArray();
+            chars1Arr = chars1.ToCharArray();        // Convert string to char array
             Array.Reverse(chars1Arr);                // Reverse characters for testing
-            chars2 = new string(chars1Arr);
+            chars2 = new string(chars1Arr);          // assign char1Arr back to the chars2 string
             Debug.Write($"{chars2}, ");
-            if (!items.Add(chars2))                  // Check to see if reversed chars2 is in the set
+            if (chars1 != chars2)
             {
-                pairsStrings[p] = chars2 + " & " + chars1;
-                p++;
+                if (!items.Add(chars2))              // Check to see if reversed chars2 is in the set
+                {
+                    // Debug.Write(" Found Match ");
+                    pairString = chars2 + " & " + chars1;
+                    pairsList.Add(pairString);
+                    // p++;
+                }
             }
         }
+
         Debug.WriteLine("     :DBG2");
 
         // DEBUG - show pairsString array contents
-        foreach (string item in pairsStrings)
+        foreach (string item in pairsList)
         {
             Debug.Write($"{item}, ");
         }
         Debug.WriteLine("   :DBG3");
-        return pairsStrings;
+
+        string[] returnArray = pairsList.ToArray(); // convert the pairs dynamic List back into a retunList array
+        return returnArray;
     }
 
     /// <summary>
@@ -83,6 +102,14 @@ public static class SetsAndMaps
         foreach (var line in File.ReadLines(filename))
         {
             var fields = line.Split(",");
+            if (degrees.ContainsKey(fields[3]))
+            {
+                degrees[fields[3]]++;   // If there is an entry in the dictionary for the degree, icrement its value
+            }
+            else
+            {
+                degrees[fields[3]] = 1;
+            }
             // TODO Problem 2 - ADD YOUR CODE HERE
         }
 
