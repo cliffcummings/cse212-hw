@@ -1,4 +1,6 @@
 using System.Text.Json;
+using System.Diagnostics;
+using System.Security.Cryptography;  // for Debug.Write operations
 
 public static class SetsAndMaps
 {
@@ -11,8 +13,8 @@ public static class SetsAndMaps
     ///
     /// ["am & ma", "if & fi"]
     ///
-    /// The order of the array does not matter, nor does the order of the specific words in each string in the array.
-    /// at would not be returned because ta is not in the list of words.
+    /// The order of the array does not matter, nor does the order of the specific words in each
+    /// string in the array. at would not be returned because ta is not in the list of words.
     ///
     /// As a special case, if the letters are the same (example: 'aa') then
     /// it would not match anything else (remember the assumption above
@@ -20,9 +22,48 @@ public static class SetsAndMaps
     /// </summary>
     /// <param name="words">An array of 2-character words (lowercase, no duplicates)</param>
     public static string[] FindPairs(string[] words)
-    {
+    { 
         // TODO Problem 1 - ADD YOUR CODE HERE
-        return [];
+        // DEBUG - show contents of words input-array
+        foreach (string word in words)
+        {
+            Debug.Write($"{word}, ");
+        }
+        Debug.WriteLine(" :DBG1");
+        string chars1 = words[0];   // To hold current input string
+        char[] chars1Arr;
+        string chars2;              // To hold reversed input string
+
+        // Declare a string array to hold string pairs
+        string[] pairsStrings = new string[words.Length/2];
+        // Declare a HashSet to store and check input words
+        HashSet<string> items = new HashSet<string>();
+        // Place the first string into the HashSet
+        items.Add(chars1);
+        int p = 0; // To index into the pairs array
+        for (int i = 1; i < words.Length; i++)
+        {
+            chars1 = words[i];
+            items.Add(chars1);                       // Add the next item to the Set
+            chars1Arr = chars1.ToCharArray();
+            Array.Reverse(chars1Arr);                // Reverse characters for testing
+            chars2 = new string(chars1Arr);
+            Debug.Write($"{chars2}, ");
+            if (!items.Add(chars2))                  // Check to see if reversed chars2 is in the set
+            {
+                pairsStrings[p] = chars2 + " & " + chars1;
+                p++;
+            }
+        }
+        Debug.WriteLine("     :DBG2");
+
+        // DEBUG - show pairsString array contents
+        foreach (string item in pairsStrings)
+        {
+            Debug.Write($"{item}, ");
+        }
+        Debug.WriteLine("   :DBG3");
+        return pairsStrings;
     }
 
     /// <summary>
