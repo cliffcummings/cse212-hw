@@ -1,7 +1,8 @@
 using System.Text.Json;
 using System.Diagnostics;
-using System.Linq; // required for ToList()
-using System.Security.Cryptography;  // for Debug.Write operations
+using System.Linq; // required for ToList() and removing white space
+using System.Security.Cryptography;
+using System.Runtime.InteropServices.Marshalling;  // for Debug.Write operations
 
 public static class SetsAndMaps
 {
@@ -141,6 +142,59 @@ public static class SetsAndMaps
     public static bool IsAnagram(string word1, string word2)
     {
         // TODO Problem 3 - ADD YOUR CODE HERE
+        
+        string W1Lower;        // converted to lowercase
+        string W2Lower;        // converted to lowercase
+
+        char[] charsW1;
+        char[] charsW2;
+
+        string W1NS;           // string1 with spaces removed
+        string W2NS;           // string2 with spaces removed
+
+        string sortedW1;
+        string sortedW2;
+
+        string sortedW1Lower;        // converted to lowercase
+        string sortedW2Lower;        // converted to lowercase
+
+        string sortedW1LowerNS;      // NS - No Spaces
+        string sortedW2LowerNS;      // NS - No Spaces
+        
+        // First remove spaces so that the Length test will be accurate
+        // Uses System.Linq
+        W1NS = string.Concat(word1.Where(c => !char.IsWhiteSpace(c)));
+        W2NS = string.Concat(word2.Where(c => !char.IsWhiteSpace(c)));
+
+        if (W1NS.Length == W2NS.Length)      // do not sort until we know the word lengths are the same
+        {
+            W1Lower = W1NS.ToLower();        // convert words to all lowercase
+            W2Lower = W2NS.ToLower();
+
+            charsW1 = W1Lower.ToCharArray(); // convert strings to character arrays
+            charsW2 = W2Lower.ToCharArray();
+
+            Array.Sort(charsW1);             // sort alphabetically the character arrays
+            Array.Sort(charsW2);
+
+            sortedW1 = new string(charsW1);  // convert the character arrays back to strings
+            sortedW2 = new string(charsW2);
+
+            Debug.WriteLine($"sortedW1 is {sortedW1}");
+            Debug.WriteLine($"sortedW2 is {sortedW2}");
+
+            if (sortedW1 == sortedW2)        // If the sorted strings match, this is a MATCH anagram
+            {
+                Debug.WriteLine("Match");
+                return true;
+            }
+            else                             // else the sorted strings are not anagrams
+            {
+                Debug.WriteLine("NO Match");
+                return false;
+            }
+        }
+        Debug.WriteLine($"W1NS.Length {W1NS} does not match W2NS.Length {W2NS}");
         return false;
     }
 
