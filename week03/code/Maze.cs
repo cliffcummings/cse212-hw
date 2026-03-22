@@ -1,3 +1,7 @@
+using System.Diagnostics;
+using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
+
 /// <summary>
 /// Defines a maze using a dictionary. The dictionary is provided by the
 /// user when the Maze object is created. The dictionary will contain the
@@ -30,9 +34,21 @@ public class Maze
     /// Check to see if you can move left.  If you can, then move.  If you
     /// can't move, throw an InvalidOperationException with the message "Can't go that way!".
     /// </summary>
+    
     public void MoveLeft()
     {
         // FILL IN CODE
+        bool [] location = _mazeMap[(_currX, _currY)];
+        if (location[0])
+        {
+            Debug.WriteLine($"MoveLeft() - from location ({_currX}, {_currY})");
+            _currX--;
+        }
+        else
+        {
+            Debug.WriteLine($"MoveLeft() - could not move left from location ({_currX}, {_currY})");
+            throw new InvalidOperationException("Can't go that way!");
+        }
     }
 
     /// <summary>
@@ -41,7 +57,17 @@ public class Maze
     /// </summary>
     public void MoveRight()
     {
-        // FILL IN CODE
+        bool [] location = _mazeMap[(_currX, _currY)];
+        if (location[1])
+        {
+            Debug.WriteLine($"MoveRight() - from location ({_currX}, {_currY})");
+            _currX++;
+        }
+        else
+        {
+            Debug.WriteLine($"MoveRight() - could not move right from location ({_currX}, {_currY})");
+            throw new InvalidOperationException("Can't go that way!");
+        }
     }
 
     /// <summary>
@@ -51,6 +77,17 @@ public class Maze
     public void MoveUp()
     {
         // FILL IN CODE
+        bool [] location = _mazeMap[(_currX, _currY)];
+        if (location[2])
+        {
+            Debug.WriteLine($"MoveUp() - from location ({_currX}, {_currY})");
+            _currY--;
+        }
+        else
+        {
+            Debug.WriteLine($"MoveUp() - could not move up from location ({_currX}, {_currY})");
+            throw new InvalidOperationException("Can't go that way!");
+        }
     }
 
     /// <summary>
@@ -60,6 +97,17 @@ public class Maze
     public void MoveDown()
     {
         // FILL IN CODE
+        bool [] location = _mazeMap[(_currX, _currY)];
+        if (location[3])
+        {
+            Debug.WriteLine($"MoveDown() - from location ({_currX}, {_currY})");
+            _currY++;
+        }
+        else
+        {
+            Debug.WriteLine($"MoveDown() - could not move down from location ({_currX}, {_currY})");
+            throw new InvalidOperationException("Can't go that way!");
+        }
     }
 
     public string GetStatus()
