@@ -223,12 +223,50 @@ public static class SetsAndMaps
         var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
         var featureCollection = JsonSerializer.Deserialize<FeatureCollection>(json, options);
+        // var fc = new FeatureCollection();
+        // fc.PrintFeatures();
+        featureCollection.PrintFeatures();
+        double? magnitude;
+        string? location;
+        List<string> outStrings = new List<string>();
+
+        // string debugString = "Uninitialize";
+        // int debugCnt = 0;
+        List<string> locations = new List<string>();
+        Debug.WriteLine("About to start foreach loop");
+        foreach (var feature in featureCollection.features)
+        {
+            // debugCnt++;
+            // debugString = "Entering foreach loop";
+            // Debug.WriteLine($"{debugString} and DebugCnt={debugCnt}");
+            magnitude = feature?.properties?.mag ?? 0.0;
+            // {
+            //     magnitude = 0.0;
+            // }
+            // else
+            // {
+            //     magnitude = feature.props.mag;
+            // }
+            location = feature.properties.place;
+
+            // debugString = ($"location = {location}");
+            locations.Add(location);
+            Debug.WriteLine($"{location} - Mag {magnitude},");
+            outStrings.Add($"{location} - Mag {magnitude},");  // Add to the dynamic array
+        }
+
+        var arrayMax = featureCollection.features.Count;
+        Debug.WriteLine($"There are {arrayMax} entries in the featureCollection array");
+
+        // Convert the dynamic array to a strings array to be returned.
+        string[] returnString = outStrings.ToArray();
 
         // TODO Problem 5:
         // 1. Add code in FeatureCollection.cs to describe the JSON using classes and properties 
-        // on those classes so that the call to Deserialize above works properly.
-        // 2. Add code below to create a string out each place a earthquake has happened today and its magitude.
+        //    on those classes so that the call to Deserialize above works properly.
+        // 2. Add code below to create a string out each place an earthquake has happened today 
+        //    and its magitude.
         // 3. Return an array of these string descriptions.
-        return [];
+        return returnString;
     }
 }
