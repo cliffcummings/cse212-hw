@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Diagnostics;
 
 public static class Recursion
 {
@@ -15,7 +16,22 @@ public static class Recursion
     public static int SumSquaresRecursive(int n)
     {
         // TODO Start Problem 1
-        return 0;
+        int squareSum = 0;
+        int localSum;
+        if (n <= 0)
+        {
+            return 0;
+        }
+        else
+        {
+            localSum = n * n;
+            // Recursion will call SumSquares Recursively until n=0, 
+            // then start popping off the intermediate values
+            // Debug.WriteLine($"Calling SumSquaresRecursive({n-1})");
+            squareSum = localSum + SumSquaresRecursive(n - 1);
+            // Debug.WriteLine($"n={n} | squareSum={squareSum} | localSum={localSum}");
+        }
+        return squareSum;
     }
 
     /// <summary>
@@ -31,15 +47,34 @@ public static class Recursion
     /// using the formula: len(letters)! / (len(letters) - size)!
     ///
     /// For example, if letters was [A,B,C] and size was 2 then
-    /// the following would the contents of the results array after the function ran: AB, AC, BA, BC, CA, CB (might be in 
-    /// a different order).
+    /// the following would the contents of the results array after the function ran:
+    /// AB, AC, BA, BC, CA, CB (might be in a different order).
     ///
     /// You can assume that the size specified is always valid (between 1 
     /// and the length of the letters list).
     /// </summary>
     public static void PermutationsChoose(List<string> results, string letters, int size, string word = "")
     {
+        // results.Add("TODO");  // For initial DEBUG
         // TODO Start Problem 2
+        // Try adding each of the available letters to the
+        // 'word' and add up all the resulting permutations.
+        if (word.Length == size)
+        {
+            results.Add(word);
+            Debug.WriteLine($"Adding {word} to results array");
+            return;
+        }
+        else
+        {
+            for (var i = 0; i < letters.Length; i++)
+            {
+                // Make a copy of the letters to pass to the next call to permutations.
+                // We need to remove the letter just added before calling Permutations again.
+                var lettersLeft = letters.Remove(i, 1);
+                PermutationsChoose(results, lettersLeft, size, word + letters[i]);
+            }
+        }
     }
 
     /// <summary>
@@ -97,9 +132,18 @@ public static class Recursion
             return 4;
 
         // TODO Start Problem 3
-
         // Solve using recursion
-        decimal ways = CountWaysToClimb(s - 1) + CountWaysToClimb(s - 2) + CountWaysToClimb(s - 3);
+        remember ??= new Dictionary<int, decimal>();  // Initialize array only if s >= 3
+
+        if (remember.ContainsKey(s))
+            return remember[s];
+
+        // Need to pass existing remember array as an input to the function
+        decimal ways = CountWaysToClimb(s - 1, remember) +
+                        CountWaysToClimb(s - 2, remember) +
+                        CountWaysToClimb(s - 3, remember);
+
+        remember[s] = ways;
         return ways;
     }
 
@@ -129,10 +173,11 @@ public static class Recursion
     {
         // If this is the first time running the function, then we need
         // to initialize the currPath list.
-        if (currPath == null) {
+        if (currPath == null)
+        {
             currPath = new List<ValueTuple<int, int>>();
         }
-        
+
         // currPath.Add((1,2)); // Use this syntax to add to the current path
 
         // TODO Start Problem 5
