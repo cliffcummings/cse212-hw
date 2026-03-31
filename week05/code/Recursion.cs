@@ -163,6 +163,26 @@ public static class Recursion
     public static void WildcardBinary(string pattern, List<string> results)
     {
         // TODO Start Problem 4
+        // List<string> genString = new List<string>();
+
+        if (!pattern.Contains("*"))
+        {
+            Debug.Write("No Wildcards in the pattern string: ");
+            Debug.WriteLine(pattern);
+            results.Add(pattern);
+            // return results;  // Not legal to return something from a void function
+        }
+        else if (pattern.Contains("*"))
+        {
+            Debug.Write("The pattern string is: ");
+            Debug.WriteLine(pattern);
+            int index = pattern.IndexOf("*");
+            string subString = pattern[..index] + "0" + pattern[(index+1)..];
+            WildcardBinary(subString, results);
+
+            subString = pattern[..index] + "1" + pattern[(index+1)..]; 
+            WildcardBinary(subString, results);
+        }
     }
 
     /// <summary>
