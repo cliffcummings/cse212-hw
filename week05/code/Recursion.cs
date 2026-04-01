@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Diagnostics;
+using System.Security.Cryptography.X509Certificates;
 
 public static class Recursion
 {
@@ -197,12 +198,46 @@ public static class Recursion
         {
             currPath = new List<ValueTuple<int, int>>();
         }
+        // Debug.WriteLine($"The maze size is {maze.Width} x {maze.Height}");
 
         // currPath.Add((1,2)); // Use this syntax to add to the current path
 
         // TODO Start Problem 5
         // ADD CODE HERE
 
-        // results.Add(currPath.AsString()); // Use this to add your path to the results array keeping track of complete maze solutions when you find the solution.
+        // IsValidMove will return true (1) if the movement to x and y is within the maze boundaries, 
+        // (2) does not represent a wall, (3) and is not someplace we have already been
+        bool valid = maze.IsValidMove(currPath,x,y);  // Is the current location valid?
+        bool visited = currPath.Contains((x,y));      // Has the current location already been visited?
+
+        if (visited) 
+        {
+            Debug.WriteLine($"({x},{y}) already visited");
+            return;
+        }
+
+        if (!valid) 
+        {
+            Debug.WriteLine($"({x},{y}) not valid");
+            return;
+        }
+
+        Debug.WriteLine($"Adding ({x},{y}) to currPath");
+        currPath.Add((x,y));                          // Add current location to path
+
+        if (maze.IsEnd(x,y))
+        {
+            results.Add(currPath.AsString()); // Use this to add your path to the results array keeping track of complete maze solutions when you find the solution.
+            Debug.WriteLine($"Found end of maze at ({x},{y})");
+            return;                 // Exit the recursive method if the end of path is found
+        }
+
+        SolveMaze(results, maze, x, y+1, currPath);  // Down
+        SolveMaze(results, maze, x+1, y, currPath);  // Right
+        SolveMaze(results, maze, x-1, y, currPath);  // Left
+        SolveMaze(results, maze, x, y-1, currPath);  // Up
+
+        Debug.WriteLine($"Back tracking from ({x},{y})");
+        currPath.RemoveAt(currPath.Count - 1);
     }
 }
