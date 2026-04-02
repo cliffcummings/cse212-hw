@@ -63,7 +63,7 @@ public static class Recursion
         if (word.Length == size)
         {
             results.Add(word);
-            Debug.WriteLine($"Adding {word} to results array");
+            // Debug.WriteLine($"Adding {word} to results array");
             return;
         }
         else
@@ -168,15 +168,15 @@ public static class Recursion
 
         if (!pattern.Contains("*"))
         {
-            Debug.Write("No Wildcards in the pattern string: ");
-            Debug.WriteLine(pattern);
+            // Debug.Write("No Wildcards in the pattern string: ");
+            // Debug.WriteLine(pattern);
             results.Add(pattern);
             // return results;  // Not legal to return something from a void function
         }
         else if (pattern.Contains("*"))
         {
-            Debug.Write("The pattern string is: ");
-            Debug.WriteLine(pattern);
+            // Debug.Write("The pattern string is: ");
+            // Debug.WriteLine(pattern);
             int index = pattern.IndexOf("*");
             string subString = pattern[..index] + "0" + pattern[(index+1)..];
             WildcardBinary(subString, results);
@@ -212,23 +212,25 @@ public static class Recursion
 
         if (visited) 
         {
-            Debug.WriteLine($"({x},{y}) already visited");
+            // Debug.WriteLine($"({x},{y}) already visited");
             return;
         }
 
         if (!valid) 
         {
-            Debug.WriteLine($"({x},{y}) not valid");
+            // Debug.WriteLine($"({x},{y}) not valid");
             return;
         }
 
-        Debug.WriteLine($"Adding ({x},{y}) to currPath");
+        // Debug.WriteLine($"Adding ({x},{y}) to currPath");
         currPath.Add((x,y));                          // Add current location to path
 
         if (maze.IsEnd(x,y))
         {
             results.Add(currPath.AsString()); // Use this to add your path to the results array keeping track of complete maze solutions when you find the solution.
-            Debug.WriteLine($"Found end of maze at ({x},{y})");
+            // Debug.WriteLine($"Found end of maze at ({x},{y})");
+            // Debug.WriteLine($"Back tracking from ({x},{y})");
+            currPath.RemoveAt(currPath.Count - 1);
             return;                 // Exit the recursive method if the end of path is found
         }
 
@@ -237,7 +239,7 @@ public static class Recursion
         SolveMaze(results, maze, x-1, y, currPath);  // Left
         SolveMaze(results, maze, x, y-1, currPath);  // Up
 
-        Debug.WriteLine($"Back tracking from ({x},{y})");
+        // Debug.WriteLine($"Back tracking from ({x},{y})");
         currPath.RemoveAt(currPath.Count - 1);
     }
 }
