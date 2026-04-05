@@ -1,3 +1,6 @@
+using System.Collections;
+using System.Collections.Generic;
+
 public class Node
 {
     public int Data { get; set; }
@@ -13,7 +16,11 @@ public class Node
     {
         // TODO Start Problem 1
 
-        if (value < Data)
+        if (value == Data)
+        {
+            // Do nothing - this is a duplicate
+        }
+        else if (value < Data)
         {
             // Insert to the left
             if (Left is null)
@@ -34,7 +41,22 @@ public class Node
     public bool Contains(int value)
     {
         // TODO Start Problem 2
-        return false;
+        if (value == Data)
+        {
+            return true;  // found the requests value
+        }
+        else if (value < Data)
+        {
+            // Traverse to the left
+            // Check if Left is null before recursing
+            return Left != null && Left.Contains(value);
+        }
+        else
+        {
+            // Traverse to the right
+            // Check if Right is null before recursing
+            return Right != null && Right.Contains(value);
+        }        
     }
 
     public int GetHeight()
@@ -42,4 +64,31 @@ public class Node
         // TODO Start Problem 4
         return 0; // Replace this line with the correct return statement(s)
     }
+
+
+
+    // Yields all values in the tree
+    // public IEnumerator<int> GetEnumerator()  // Requirement #1
+    // {
+    //     // call the typed version of the method
+    //     return TraverseBackward().GetEnumerator();
+    // }
+
+    // IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();       // Requirement #2
+
+    // private IEnumerable<int> TraverseBackward(Node? node)
+    // {
+    //     if (node is not null)
+    //     {
+    //         foreach (var val in TraverseBackward(node.Right))
+    //             yield return val;
+
+    //         yield return node.Data;
+
+    //         foreach (var val in TraverseBackward(node.Left))
+    //             yield return val;
+    //     }
+    //     else yield break;
+    // }
+
 }
