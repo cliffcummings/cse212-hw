@@ -9,6 +9,7 @@ public static class Trees
     /// a range (first to last) to consider.  For the first call, the full range of 0 to
     /// Length-1 used.
     /// </summary>
+    
     public static BinarySearchTree CreateTreeFromSortedList(int[] sortedNumbers)
     {
         var bst = new BinarySearchTree(); // Create an empty BST to start with 
