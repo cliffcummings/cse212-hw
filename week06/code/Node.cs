@@ -62,7 +62,18 @@ public class Node
     public int GetHeight()
     {
         // TODO Start Problem 4
-        return 0; // Replace this line with the correct return statement(s)
+        int leftHeight = 0;
+        int rightHeight = 0;
+
+        // if (Left == null && Right == null) return 1; // already covered by the tests below
+        // Check left branches
+        if (Left != null) leftHeight = Left.GetHeight();
+
+        // Check right branches
+        if (Right != null) rightHeight = Right.GetHeight();
+
+        if (leftHeight >= rightHeight) return leftHeight + 1;
+        else return rightHeight +1;
     }
 
 
