@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 public static class Trees
 {
     /// <summary>
@@ -50,5 +52,21 @@ public static class Trees
     private static void InsertMiddle(int[] sortedNumbers, int first, int last, BinarySearchTree bst)
     {
         // TODO Start Problem 5
+        if (first > last)    // Base case
+        {
+            return;
+        }
+
+        // Debug.WriteLine($"first={first} / last={last}");
+        int middle = (first + last)/2;
+        bst.Insert(sortedNumbers[middle]);
+
+        // Go left
+        InsertMiddle(sortedNumbers, first, middle-1, bst);
+        // Debug.WriteLine($"first={first} / last={last} / Done going left");
+
+        // Go right           
+        InsertMiddle(sortedNumbers, middle+1, last, bst);
+        // Debug.WriteLine($"first={first} / last={last} / Done going right");
     }
 }
